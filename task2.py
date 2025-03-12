@@ -2,7 +2,7 @@ import re
 from typing import Callable
 
 def generator_numbers(text: str):
-    pattern = r'-?d+(.d+)?'
+    pattern = r'\b\d+\.\d+\b'
     matches = re.findall(pattern, text)
 
     for match in matches:

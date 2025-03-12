@@ -1,6 +1,5 @@
 from functools import wraps
 
-contacts = {}
 
 def input_error(func):
     def inner(*args, **kwargs):
@@ -15,24 +14,21 @@ def input_error(func):
         
     return inner
 
+@input_error
 def parse_input(user_input):
     command, *args = user_input.split()
     command = command.strip().lower()
     return command, args
 
 @input_error
-def add_contact(item):
-    if len(item) !=2:
-        raise ValueError
-    
+def add_contact(item, contacts):
+   
     name,phone = item
     contacts[name] = phone
     return 'Contact added.'
 
 @input_error
-def change_contact(item):
-    if len(item) !=2:
-        raise ValueError
+def change_contact(item, contacts):
     
     name, phone = item
     if name in contacts:
@@ -41,15 +37,13 @@ def change_contact(item):
     raise KeyError
 
 @input_error
-def show_phone(item):
-    if(item) !=1:
-        raise ValueError
+def show_phone(item, contacts):
 
     name = item[0]
     return contacts.get(name, 'Error: contact not found.')
 
 @input_error
-def show_all():
+def show_all(contacts):
     if not contacts:
         return 'Список контактів порожній!' 
     
@@ -59,6 +53,8 @@ def show_all():
     return '\n'.join(result)
 
 def main():
+    contacts = {}
+    
     print("Welcome to the assistant bot!")
     while True:
         user_input = input("Enter a command: ").strip()
@@ -73,13 +69,13 @@ def main():
         elif command == "hello":
             print("How can I help you?")
         elif command == "add":
-            print(add_contact(item))
+            print(add_contact(item, contacts))
         elif command == "change":
-            print(change_contact(item))
+            print(change_contact(item, contacts))
         elif command == "phone":
-            print(show_phone(item))
+            print(show_phone(item, contacts))
         elif command == "all":
-            print(show_all())
+            print(show_all(contacts))
         else:
             print("Invalid command")
 
